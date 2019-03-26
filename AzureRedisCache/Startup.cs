@@ -31,6 +31,12 @@ namespace AzureRedisCache
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            services.AddDistributedRedisCache(options =>
+            {
+                options.Configuration = Configuration.GetConnectionString("RedisCache");
+            });
+
+            services.AddSession();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
@@ -51,6 +57,9 @@ namespace AzureRedisCache
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+
+            app.UseSession();
+
             app.UseCookiePolicy();
 
             app.UseMvc(routes =>
